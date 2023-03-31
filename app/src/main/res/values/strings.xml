@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Dish Genius</string>
+    <string name="action_settings">Settings</string>
+    <string name="data_resep_label">Tampilan Resep</string>
+    <string name="input_resep_label">Tambah Resep</string>
+    <string name="nama_resep">Nama Resep</string>
+    <string name="kategori_resep">Makanan</string>
+    <string name="tombol_simpan">Simpan</string>
+    <string name="desc_resep">Deskripsi Singkat</string>
+</resources>
