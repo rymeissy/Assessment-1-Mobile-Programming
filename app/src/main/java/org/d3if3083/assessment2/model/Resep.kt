@@ -1,4 +1,4 @@
-package org.d3if3083.assessment1
+package org.d3if3083.assessment2.model
 
 import java.io.Serializable
 

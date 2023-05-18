@@ -1,4 +1,4 @@
-package org.d3if3083.assessment1
+package org.d3if3083.assessment2
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

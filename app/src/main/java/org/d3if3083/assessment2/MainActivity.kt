@@ -1,7 +1,6 @@
-package org.d3if3083.assessment1
+package org.d3if3083.assessment2
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.navigation.findNavController
@@ -10,7 +9,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
-import org.d3if3083.assessment1.databinding.ActivityMainBinding
+import org.d3if3083.assessment2.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 

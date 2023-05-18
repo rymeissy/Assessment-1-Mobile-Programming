@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="org.d3if3083.assessment1.DataResep"
+        android:name="org.d3if3083.assessment2.ui.DataResep"
         android:label="@string/data_resep_label"
         tools:layout="@layout/resep_data">
 
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="org.d3if3083.assessment1.InputResep"
+        android:name="org.d3if3083.assessment2.ui.InputResep"
         android:label="@string/input_resep_label"
         tools:layout="@layout/resep_input">
 

@@ -1,8 +1,6 @@
-package org.d3if3083.assessment1
+package org.d3if3083.assessment2.ui
 
-import android.content.Intent
 import android.os.Bundle
-import android.provider.ContactsContract.Data
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +9,10 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import org.d3if3083.assessment1.databinding.ResepInputBinding
+import org.d3if3083.assessment2.R
+import org.d3if3083.assessment2.databinding.ResepInputBinding
+
+import org.d3if3083.assessment2.model.Resep
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
