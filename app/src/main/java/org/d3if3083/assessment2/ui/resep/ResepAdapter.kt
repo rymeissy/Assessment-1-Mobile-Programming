@@ -1,4 +1,4 @@
-package org.d3if3083.assessment2.ui
+package org.d3if3083.assessment2.ui.resep
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,8 +6,14 @@ import androidx.recyclerview.widget.RecyclerView
 import org.d3if3083.assessment2.databinding.ListItemBinding
 import org.d3if3083.assessment2.model.Resep
 
-class ResepAdapter(private val data: List<Resep>) :
-    RecyclerView.Adapter<ResepAdapter.ViewHolder>() {
+class ResepAdapter : RecyclerView.Adapter<ResepAdapter.ViewHolder>() {
+
+    private val data = mutableListOf<Resep>()
+    fun updateData(newData: List<Resep>) {
+        data.clear()
+        data.addAll(newData)
+        notifyDataSetChanged()
+    }
 
     class ViewHolder(
         private val binding: ListItemBinding

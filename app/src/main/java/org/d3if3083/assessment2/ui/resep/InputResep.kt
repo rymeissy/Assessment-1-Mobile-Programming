@@ -1,4 +1,4 @@
-package org.d3if3083.assessment2.ui
+package org.d3if3083.assessment2.ui.resep
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -49,7 +49,6 @@ class InputResep : Fragment() {
         binding.spinner.adapter = adapter
 
         binding.buttonSimpan.setOnClickListener {
-
             // validasi input
             if (binding.namaInp.text.toString().isEmpty()) {
                 binding.namaInp.error = "Nama resep tidak boleh kosong"

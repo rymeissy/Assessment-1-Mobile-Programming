@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/TampilanResep"
-        android:name="org.d3if3083.assessment2.ui.DataResep"
+        android:name="org.d3if3083.assessment2.ui.resep.DataResep"
         android:label="@string/data_resep_label"
         tools:layout="@layout/resep_data">
 
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/InputResep"
-        android:name="org.d3if3083.assessment2.ui.InputResep"
+        android:name="org.d3if3083.assessment2.ui.resep.InputResep"
         android:label="@string/input_resep_label"
         tools:layout="@layout/resep_input">
 
@@ -30,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"
-        android:name="org.d3if3083.assessment2.ui.AboutFragment"
+        android:name="org.d3if3083.assessment2.ui.about.AboutFragment"
         android:label="@string/action_about"
         tools:layout="@layout/fragment_about" />
 </navigation>

@@ -1,4 +1,4 @@
-package org.d3if3083.assessment2.ui
+package org.d3if3083.assessment2.ui.about
 
 import android.os.Bundle
 import android.view.View
