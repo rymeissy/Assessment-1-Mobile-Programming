@@ -76,6 +76,10 @@ class DataResep : Fragment() {
             findNavController().navigate(
                 R.id.action_TampilanResep_to_aboutFragment)
             return true
+        } else if (item.itemId == R.id.menu_histori) {
+            findNavController().navigate(
+                R.id.action_TampilanResep_to_historiFragment)
+            return true
         }
         return super.onOptionsItemSelected(item)
     }

@@ -2,6 +2,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.d3if3083.assessment2.ui.resep.DataResep">
+
+    <item
+        android:id="@+id/menu_histori"
+        android:icon="@drawable/ic_baseline_history_24"
+        android:title="@string/histori"
+        app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/menu_about"
         android:title="@string/action_about"

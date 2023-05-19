@@ -7,6 +7,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.d3if3083.assessment2.R
 
 class AboutFragment : Fragment(R.layout.fragment_about) {
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Menyembunyikan FAB
