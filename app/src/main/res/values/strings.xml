@@ -7,4 +7,6 @@
     <string name="kategori_resep">Makanan</string>
     <string name="tombol_simpan">Simpan</string>
     <string name="desc_resep">Deskripsi Singkat</string>
+    <string name="copyright">Dish Genius adalah sebuah aplikasi Android untuk menemukan inspirasi resep makanan dan minuman yang dapat dicoba di rumah. Aplikasi ini menawarkan berbagai macam resep masakan dari berbagai jenis masakan, mulai dari masakan lokal hingga masakan internasional.
+        \n\nCopyright © 2023 Dish Genius.\nAll rights reserved.</string>
 </resources>

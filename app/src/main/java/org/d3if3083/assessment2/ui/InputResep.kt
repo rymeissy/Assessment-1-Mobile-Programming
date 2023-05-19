@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.d3if3083.assessment2.R
 import org.d3if3083.assessment2.databinding.ResepInputBinding
-
 import org.d3if3083.assessment2.model.Resep
 
 /**
@@ -34,14 +33,13 @@ class InputResep : Fragment() {
         activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.GONE
 
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         // Buat daftar item yang akan ditampilkan pada spinner
-        val items = listOf("Kategori" ,"Makanan", "Minuman")
+        val items = listOf("Kategori", "Makanan", "Minuman")
 
         // Buat adapter dan tambahkan item ke dalam adapter
         val adapter =
@@ -62,11 +60,12 @@ class InputResep : Fragment() {
                 return@setOnClickListener
             }
             if (binding.spinner.selectedItem.toString() == "Kategori") {
-                Toast.makeText(requireContext(), "Kategori tidak boleh kosong", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Kategori tidak boleh kosong", Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
 
-           // kirim data ke fragment data resep berbentuk object
+            // kirim data ke fragment data resep berbentuk object
             val resep = Resep(
                 binding.namaInp.text.toString(),
                 binding.descInp.text.toString(),
@@ -81,7 +80,7 @@ class InputResep : Fragment() {
             val fragment = DataResep()
             fragment.arguments = bundle
 
-            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment, bundle)
+            findNavController().navigate(R.id.action_InputResep_to_TampilanResep, bundle)
         }
 
     }
@@ -90,6 +89,4 @@ class InputResep : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-
 }

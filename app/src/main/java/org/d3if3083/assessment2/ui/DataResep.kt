@@ -3,8 +3,12 @@ package org.d3if3083.assessment2.ui
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -29,6 +33,7 @@ class DataResep : Fragment() {
     ): View {
 
         _binding = ResepDataBinding.inflate(inflater, container, false)
+        setHasOptionsMenu(true)
 
         with(binding.recyclerView) {
             addItemDecoration(DividerItemDecoration(context, RecyclerView.VERTICAL))
@@ -51,6 +56,19 @@ class DataResep : Fragment() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_main, menu)
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menu_about) {
+            findNavController().navigate(
+                R.id.action_TampilanResep_to_aboutFragment)
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -58,15 +76,15 @@ class DataResep : Fragment() {
 
     private fun getData(): List<Resep> {
         return listOf(
-            Resep("Baso Bakar", "Bakso yang dibakar dengan bumbu kacang", "Makanan",
+            Resep("Baso Bakar", "Baso yang dibakar dengan bumbu kacang", "Makanan",
                 R.drawable.bakso
             ),
-            Resep("Es Saos", "Es campur saos", "Minuman", R.drawable.es),
-            Resep("Tutuk", "Nasi Kelutuk, penasaran ya?", "Makanan", R.drawable.tutuk),
+            Resep("Es Jeruk", "Es jeruk segeerrr", "Minuman", R.drawable.es),
+            Resep("Nasi Goreng Spesial", "Rasanya spesial banget dan nagih", "Makanan", R.drawable.tutuk),
             Resep("Mangga Yakult", "Mangga yang dicampur dengan Yakult", "Minuman",
                 R.drawable.mangga
             ),
-            Resep("Pizza", "Pizza dengan topping", "Makanan", R.drawable.pizza),
+            Resep("Pizza Yummy", "Pizza dengan topping", "Makanan", R.drawable.pizza),
             Resep("Soda Ceria","Soda yang manis", "Minuman", R.drawable.soda),
         )
     }

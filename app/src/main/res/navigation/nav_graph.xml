@@ -3,26 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/TampilanResep">
 
     <fragment
-        android:id="@+id/FirstFragment"
+        android:id="@+id/TampilanResep"
         android:name="org.d3if3083.assessment2.ui.DataResep"
         android:label="@string/data_resep_label"
         tools:layout="@layout/resep_data">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_TampilanResep_to_InputResep"
+            app:destination="@id/InputResep" />
+        <action
+            android:id="@+id/action_TampilanResep_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
+        android:id="@+id/InputResep"
         android:name="org.d3if3083.assessment2.ui.InputResep"
         android:label="@string/input_resep_label"
         tools:layout="@layout/resep_input">
 
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_InputResep_to_TampilanResep"
+            app:destination="@id/TampilanResep" />
     </fragment>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="org.d3if3083.assessment2.ui.AboutFragment"
+        android:label="@string/action_about"
+        tools:layout="@layout/fragment_about" />
 </navigation>
