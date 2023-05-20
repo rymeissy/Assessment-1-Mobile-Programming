@@ -81,7 +81,6 @@ class InputResep : Fragment() {
 
             findNavController().navigate(R.id.action_InputResep_to_TampilanResep, bundle)
         }
-
     }
 
     override fun onDestroyView() {
