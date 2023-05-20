@@ -1,29 +1,70 @@
 package org.d3if3083.assessment2.ui.resep
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.d3if3083.assessment2.R
+import org.d3if3083.assessment2.db.ResepDao
+import org.d3if3083.assessment2.db.ResepEntity
 import org.d3if3083.assessment2.model.Resep
 
-class ResepViewModel : ViewModel() {
+class ResepViewModel(private val db: ResepDao) : ViewModel() {
 
-    private val data = MutableLiveData<List<Resep>>()
+    // mengambil data dari database
+    private val data: LiveData<List<ResepEntity>> = db.getLastRecipe()
 
-    init {
-        data.value = initData()
+    // fungsi untuk insert data ke database
+    fun insertData(resep: ResepEntity) = viewModelScope.launch {
+        withContext(Dispatchers.IO) {
+            db.insert(resep)
+        }
     }
 
-    private fun initData(): List<Resep> {
-        return listOf(
-            Resep("Baso Bakar", "Baso yang dibakar dengan bumbu kacang", "Makanan", R.drawable.bakso),
-            Resep("Es Jeruk", "Es jeruk segeerrr", "Minuman", R.drawable.es),
-            Resep("Nasi Goreng Spesial", "Rasanya spesial banget dan nagih", "Makanan", R.drawable.nasgor),
-            Resep("Mangga Yakult", "Mangga yang dicampur dengan Yakult", "Minuman", R.drawable.mangga),
-            Resep("Pizza Yummy", "Pizza dengan topping", "Makanan", R.drawable.pizza),
-            Resep("Soda Ceria","Soda yang manis", "Minuman", R.drawable.soda),
-        )
+    fun initData() {
+        listOf(
+            ResepEntity(
+                namaResep = "Baso Bakar",
+                descResep = "Baso yang dibakar dengan bumbu kacang",
+                kategori = "Makanan",
+                gambar = R.drawable.bakso
+            ),
+            ResepEntity(
+                namaResep = "Es Jeruk",
+                descResep = "Es jeruk segeerrr",
+                kategori = "Minuman",
+                gambar = R.drawable.es
+            ),
+            ResepEntity(
+                namaResep = "Nasi Goreng Spesial",
+                descResep = "Rasanya spesial banget dan nagih",
+                kategori = "Makanan",
+                gambar = R.drawable.nasgor
+            ),
+            ResepEntity(
+                namaResep = "Mangga Yakult",
+                descResep = "Mangga yang dicampur dengan Yakult",
+                kategori = "Minuman",
+                gambar = R.drawable.mangga
+            ),
+            ResepEntity(
+                namaResep = "Pizza Yummy",
+                descResep = "Pizza dengan topping",
+                kategori = "Makanan",
+                gambar = R.drawable.pizza
+            ),
+            ResepEntity(
+                namaResep = "Soda Ceria",
+                descResep = "Soda yang manis",
+                kategori = "Minuman",
+                gambar = R.drawable.soda
+            ),
+        ).forEach {
+            insertData(it)
+        }
     }
 
-    fun getData(): LiveData<List<Resep>> = data
+    fun getResep(): LiveData<List<ResepEntity>> = data
 }

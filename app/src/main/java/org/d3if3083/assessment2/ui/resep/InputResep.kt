@@ -7,10 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.d3if3083.assessment2.R
 import org.d3if3083.assessment2.databinding.ResepInputBinding
+import org.d3if3083.assessment2.db.ResepDb
+import org.d3if3083.assessment2.db.ResepEntity
 import org.d3if3083.assessment2.model.Resep
 
 /**
@@ -19,6 +22,12 @@ import org.d3if3083.assessment2.model.Resep
 class InputResep : Fragment() {
 
     private var _binding: ResepInputBinding? = null
+
+    private val viewModel: ResepViewModel by lazy {
+        val db = ResepDb.getInstance(requireContext())
+        val factory = ResepViewModelFactory(db.dao)
+        ViewModelProvider(this, factory)[ResepViewModel::class.java]
+    }
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -49,38 +58,49 @@ class InputResep : Fragment() {
         binding.spinner.adapter = adapter
 
         binding.buttonSimpan.setOnClickListener {
-            // validasi input
-            if (binding.namaInp.text.toString().isEmpty()) {
-                binding.namaInp.error = "Nama resep tidak boleh kosong"
-                return@setOnClickListener
-            }
-            if (binding.descInp.text.toString().isEmpty()) {
-                binding.descInp.error = "Deskripsi resep tidak boleh kosong"
-                return@setOnClickListener
-            }
-            if (binding.spinner.selectedItem.toString() == "Kategori") {
-                Toast.makeText(requireContext(), "Kategori tidak boleh kosong", Toast.LENGTH_SHORT)
-                    .show()
-                return@setOnClickListener
-            }
-
-            // kirim data ke fragment data resep berbentuk object
-            val resep = Resep(
-                binding.namaInp.text.toString(),
-                binding.descInp.text.toString(),
-                binding.spinner.selectedItem.toString()
-            )
-
-            // kirim data ke fragment data resep berbentuk bundle
-            val bundle = Bundle().apply {
-                putSerializable("resep", resep)
-            }
-
-            val fragment = DataResep()
-            fragment.arguments = bundle
-
-            findNavController().navigate(R.id.action_InputResep_to_TampilanResep, bundle)
+            simpanDataResep()
         }
+    }
+
+    private fun simpanDataResep() {
+        // validasi input
+        if (binding.namaInp.text.toString().isEmpty()) {
+            binding.namaInp.error = "Nama resep tidak boleh kosong"
+            return
+        }
+        if (binding.descInp.text.toString().isEmpty()) {
+            binding.descInp.error = "Deskripsi resep tidak boleh kosong"
+            return
+        }
+        if (binding.spinner.selectedItem.toString() == "Kategori") {
+            Toast.makeText(requireContext(), "Kategori tidak boleh kosong", Toast.LENGTH_SHORT)
+                .show()
+            return
+        }
+
+        // size of data before adding new data
+//        val size = viewModel.data.value?.size
+
+        val resep = ResepEntity(
+            namaResep = binding.namaInp.text.toString(),
+            descResep = binding.descInp.text.toString(),
+            kategori = binding.spinner.selectedItem.toString(),
+            // jika kategori makanan maka gambar bakso
+            gambar = R.drawable.bakso,
+        )
+
+        viewModel.insertData(resep)
+
+        /*        // check if data is added to database
+                if (viewModel.data.value?.size == size?.plus(1)) {
+                    Toast.makeText(requireContext(), "Data berhasil ditambahkan dan size = $size", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    Toast.makeText(requireContext(), "Data gagal ditambahkan dan size $size", Toast.LENGTH_SHORT)
+                        .show()
+                }*/
+
+        findNavController().navigate(R.id.action_InputResep_to_TampilanResep)
     }
 
     override fun onDestroyView() {

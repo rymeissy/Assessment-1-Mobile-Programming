@@ -4,30 +4,51 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.d3if3083.assessment2.databinding.ListItemBinding
-import org.d3if3083.assessment2.model.Resep
+import org.d3if3083.assessment2.db.ResepEntity
 
-class ResepAdapter : RecyclerView.Adapter<ResepAdapter.ViewHolder>() {
+class ResepAdapter() :
+    RecyclerView.Adapter<ResepAdapter.ViewHolder>() {
 
-    private val data = mutableListOf<Resep>()
-    fun updateData(newData: List<Resep>) {
+    val data = mutableListOf<ResepEntity>()
+
+    // init data
+
+    init {
+        initData()
+    }
+
+    private fun initData() {
+
+    }
+
+    // update data of rycycler view
+    fun updateData(newData: List<ResepEntity>) {
         data.clear()
-        data.addAll(newData)
+        for (item in newData) {
+            data.add(item)
+        }
         notifyDataSetChanged()
     }
+
+    /* // method use in DataResep.kt
+     fun updateData(newData: List<ResepEntity>) {
+         data.clear()
+         for (item in newData) {
+             data.add(item)
+         }
+     }*/
 
     class ViewHolder(
         private val binding: ListItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(resep: Resep) = with(binding) {
-            namaTextView.text = resep.namaResep
-            kategoriTextView.text = resep.kategori
-            descTextView.text = resep.descResep
-            imageView.setImageResource(resep.gambar)
-
-            root.setOnClickListener {
-//                val message = root.context.getString(R.string.message, resep.namaHewan)
-//                Toast.makeText(root.context, message, Toast.LENGTH_LONG).show()
+        fun bind(resepEntity: ResepEntity) {
+            // Bind the data to the views in the layout
+            binding.apply {
+                namaTextView.text = resepEntity.namaResep
+                kategoriTextView.text = resepEntity.kategori
+                descTextView.text = resepEntity.descResep
+                imageView.setImageResource(resepEntity.gambar)
             }
         }
     }

@@ -1,5 +1,6 @@
 package org.d3if3083.assessment2.db
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -10,7 +11,7 @@ interface ResepDao {
     fun insert(recipe: ResepEntity)
 
     @Query("SELECT * FROM recipe ORDER BY id DESC")
-    fun getLastRecipe(): List<ResepEntity>
+    fun getLastRecipe(): LiveData<List<ResepEntity>>
 
     @Query("DELETE FROM recipe")
     fun clearData()
