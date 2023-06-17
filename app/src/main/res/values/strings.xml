@@ -12,4 +12,10 @@
     <string name="belum_ada_data">Data masih kosong</string>
     <string name="histori">Histori</string>
     <string name="deskripsi">Deskripsi</string>
+
+    <string name="hapus_histori">Hapus Histori</string>
+    <string name="konfirmasi_hapus_item">Hapus Resep?</string>
+    <string name="hapus">Hapus</string>
+    <string name="batal">Batal</string>
+
 </resources>

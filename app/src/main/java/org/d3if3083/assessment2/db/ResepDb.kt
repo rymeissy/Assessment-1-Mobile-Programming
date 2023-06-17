@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase
 @Database(entities = [ResepEntity::class], version = 1, exportSchema = false)
 abstract class ResepDb : RoomDatabase() {
 
-    abstract val dao: ResepDao
+    abstract val resepDao: ResepDao
 
     companion object {
 

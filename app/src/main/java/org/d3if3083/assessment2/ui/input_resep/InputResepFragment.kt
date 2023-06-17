@@ -1,31 +1,40 @@
-package org.d3if3083.assessment2.ui.resep
+package org.d3if3083.assessment2.ui.input_resep
 
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.Intent
+import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.d3if3083.assessment2.R
-import org.d3if3083.assessment2.databinding.ResepInputBinding
+import org.d3if3083.assessment2.databinding.FragmentInputResepBinding
 import org.d3if3083.assessment2.db.ResepDb
 import org.d3if3083.assessment2.db.ResepEntity
-import org.d3if3083.assessment2.model.Resep
+import org.d3if3083.assessment2.ui.resep.ResepViewModel
+import org.d3if3083.assessment2.ui.resep.ResepViewModelFactory
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
-class InputResep : Fragment() {
+class InputResepFragment : Fragment() {
 
-    private var _binding: ResepInputBinding? = null
+    private var _binding: FragmentInputResepBinding? = null
 
     private val viewModel: ResepViewModel by lazy {
         val db = ResepDb.getInstance(requireContext())
-        val factory = ResepViewModelFactory(db.dao)
+        val factory = ResepViewModelFactory(db.resepDao)
         ViewModelProvider(this, factory)[ResepViewModel::class.java]
     }
 
@@ -37,7 +46,7 @@ class InputResep : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = ResepInputBinding.inflate(inflater, container, false)
+        _binding = FragmentInputResepBinding.inflate(inflater, container, false)
         // menghilangkan FAB
         activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.GONE
 
@@ -101,6 +110,10 @@ class InputResep : Fragment() {
                 }*/
 
         findNavController().navigate(R.id.action_InputResep_to_TampilanResep)
+    }
+
+    companion object {
+        private const val REQUEST_IMAGE_PICK = 1001
     }
 
     override fun onDestroyView() {

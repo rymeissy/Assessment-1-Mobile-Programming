@@ -3,42 +3,48 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/TampilanResep">
+    app:startDestination="@id/resepFragment">
 
     <fragment
-        android:id="@+id/TampilanResep"
-        android:name="org.d3if3083.assessment2.ui.resep.DataResep"
+        android:id="@+id/resepFragment"
+        android:name="org.d3if3083.assessment2.ui.resep.ResepFragment"
         android:label="@string/data_resep_label"
-        tools:layout="@layout/resep_data">
+        tools:layout="@layout/fragment_resep">
 
         <action
-            android:id="@+id/action_TampilanResep_to_InputResep"
+            android:id="@+id/action_resepFragment_to_detailResepFragment"
+            app:destination="@id/detailResepFragment" />
+        <action
+            android:id="@+id/action_resepFragment_to_InputResep"
             app:destination="@id/InputResep" />
         <action
-            android:id="@+id/action_TampilanResep_to_aboutFragment"
+            android:id="@+id/action_resepFragment_to_aboutFragment"
             app:destination="@id/aboutFragment" />
-        <action
-            android:id="@+id/action_TampilanResep_to_historiFragment"
-            app:destination="@id/historiFragment" />
     </fragment>
     <fragment
         android:id="@+id/InputResep"
-        android:name="org.d3if3083.assessment2.ui.resep.InputResep"
+        android:name="org.d3if3083.assessment2.ui.input_resep.InputResepFragment"
         android:label="@string/input_resep_label"
-        tools:layout="@layout/resep_input">
+        tools:layout="@layout/fragment_input_resep">
 
         <action
             android:id="@+id/action_InputResep_to_TampilanResep"
-            app:destination="@id/TampilanResep" />
+            app:destination="@id/resepFragment" />
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"
         android:name="org.d3if3083.assessment2.ui.about.AboutFragment"
         android:label="@string/action_about"
         tools:layout="@layout/fragment_about" />
+
     <fragment
-        android:id="@+id/historiFragment"
-        android:name="org.d3if3083.assessment2.ui.histori.HistoriFragment"
-        android:label="@string/histori"
-        tools:layout="@layout/fragment_histori"  />
+        android:id="@+id/detailResepFragment"
+        android:name="org.d3if3083.assessment2.ui.detail_resep.DetailResepFragment"
+        android:label="fragment_detail_resep"
+        tools:layout="@layout/fragment_detail_resep">
+        <argument
+            android:name="currentResep"
+            app:argType="org.d3if3083.assessment2.db.ResepEntity" />
+    </fragment>
+
 </navigation>
