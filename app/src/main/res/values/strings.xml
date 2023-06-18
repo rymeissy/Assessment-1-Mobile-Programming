@@ -17,5 +17,6 @@
     <string name="konfirmasi_hapus_item">Hapus Resep?</string>
     <string name="hapus">Hapus</string>
     <string name="batal">Batal</string>
+    <string name="kategori_hint">Pilih Kategori</string>
 
 </resources>

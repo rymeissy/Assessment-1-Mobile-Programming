@@ -13,7 +13,6 @@ data class ResepEntity(
     val descResep: String,
     val kategori: String,
     val gambar: Int = 0,
-    var tanggal: Long = System.currentTimeMillis()
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
@@ -22,9 +21,7 @@ data class ResepEntity(
         parcel.readString().toString(),
         parcel.readString().toString(),
         parcel.readInt(),
-        parcel.readLong()
-    ) {
-    }
+    )
 
     override fun describeContents(): Int {
         return 0
@@ -36,7 +33,6 @@ data class ResepEntity(
         dest.writeString(descResep)
         dest.writeString(kategori)
         dest.writeInt(gambar)
-        dest.writeLong(tanggal)
     }
 
     companion object CREATOR : Parcelable.Creator<ResepEntity> {

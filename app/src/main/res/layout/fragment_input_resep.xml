@@ -23,29 +23,43 @@
             app:layout_constraintStart_toStartOf="@+id/desc_inp"
             app:layout_constraintTop_toBottomOf="@+id/nama_inp" />
 
+        <TextView
+            android:id="@+id/textKategori"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="Kategori"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/spinner"
+            app:layout_constraintTop_toBottomOf="@+id/desc_inp" />
+
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="2dp"
             android:entries="@array/kategori_resep"
             android:minHeight="48dp"
             android:prompt="@string/kategori_resep"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.064"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/desc_inp" />
+            app:layout_constraintTop_toBottomOf="@+id/textKategori" />
 
         <Button
             android:id="@+id/buttonSimpan"
-            android:layout_width="wrap_content"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="48dp"
             android:text="@string/tombol_simpan"
+            app:cornerRadius="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinner" />
+            app:layout_constraintTop_toBottomOf="@+id/gambarResepYangDiunggah" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/nama_inp"
@@ -90,7 +104,49 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="16dp" />
+            app:layout_constraintGuide_percent="0.04136253" />
+
+        <ImageView
+            android:id="@+id/gambarResepYangDiunggah"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="16dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="2:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.531"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textGambar"
+            app:srcCompat="@drawable/ic_baseline_insert_photo_24" />
+
+        <Button
+            android:id="@+id/buttonUnggahdGambar"
+            style="@style/Widget.MaterialComponents.Button.Icon"
+            app:icon="@drawable/baseline_upload_24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Unggah"
+            app:cornerRadius="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/gambarResepYangDiunggah"
+            app:layout_constraintEnd_toEndOf="@id/gambarResepYangDiunggah"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@id/gambarResepYangDiunggah"
+            app:layout_constraintTop_toTopOf="@id/gambarResepYangDiunggah"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <TextView
+            android:id="@+id/textGambar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:text="Gambar"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/gambarResepYangDiunggah"
+            app:layout_constraintTop_toBottomOf="@+id/spinner" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
