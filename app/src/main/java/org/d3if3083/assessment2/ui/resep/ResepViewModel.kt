@@ -6,32 +6,36 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.d3if3083.assessment2.R
 import org.d3if3083.assessment2.db.ResepDao
+import org.d3if3083.assessment2.db.ResepEntity
 import org.d3if3083.assessment2.model.Resep
 import org.d3if3083.assessment2.network.UpdateWorker
-import org.d3if3083.assessment2.ui.detail_resep.DetailResepFragment
 import org.d3if3083.assessment2.ui.input_resep.InputResepFragment
 import org.d3if3083.galerihewan.network.ApiStatus
 import org.d3if3083.galerihewan.network.ResepApi
 import java.util.concurrent.TimeUnit
 
-class ResepViewModel : ViewModel() {
+class ResepViewModel(
+    private val db: ResepDao,
+) : ViewModel() {
 
-    // mengambil data dari database
+    // mengambil data dari API
     private val data = MutableLiveData<List<Resep>>()
     private val status = MutableLiveData<ApiStatus>()
 
     init {
         retrieveData()
+    }
+
+    fun simpanDbResep(resep: ResepEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            db.insert(resep)
+        }
     }
 
     fun retrieveData() {
@@ -58,7 +62,7 @@ class ResepViewModel : ViewModel() {
         )
     }
 
-    suspend fun updateData(fragment: InputResepFragment, resep: Resep) : Boolean {
+    suspend fun updateData(fragment: InputResepFragment, resep: Resep): Boolean {
         status.postValue(ApiStatus.LOADING)
         try {
             val list = data.value!!.toMutableList()
@@ -66,6 +70,7 @@ class ResepViewModel : ViewModel() {
             data.postValue(list)
 
             ResepApi.service.putResep(list.toList())
+            simpanDbResep(resep.toResepEntity())
             status.postValue(ApiStatus.SUCCESS)
             return true
         } catch (e: Exception) {
@@ -75,7 +80,7 @@ class ResepViewModel : ViewModel() {
         return false
     }
 
-    suspend fun deleteResep(resep: Resep) : Boolean {
+    suspend fun deleteResep(resep: Resep): Boolean {
         status.postValue(ApiStatus.LOADING)
         try {
             val list = data.value!!.toMutableList()

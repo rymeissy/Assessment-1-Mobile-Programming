@@ -21,11 +21,14 @@
     <string name="text_upload_button">Unggah</string>
     <string name="text_ImageView_gambar">Gambar</string>
 
+    <string name="switch_layout">Ubah tampilan</string>
+
     // notif
     <string name="channel_name">Updater</string>
     <string name="channel_desc">Update data resep</string>
     <string name="notif_title">Resep yang paling enak telah hadir!</string>
     <string name="notif_text">Kira-kira makanan atau minuman apa ya? Cek sekarang yuk!</string>
     <string name="hapus_resep">Hapus Resep</string>
+    <string name="histori_fragment_label">Riwayat</string>
 
 </resources>

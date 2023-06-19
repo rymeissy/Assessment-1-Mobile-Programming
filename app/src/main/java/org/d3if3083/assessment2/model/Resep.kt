@@ -33,6 +33,16 @@ data class Resep(
         dest.writeString(gambarId)
     }
 
+    fun toResepEntity(): ResepEntity {
+        return ResepEntity(
+            id = id,
+            namaResep = namaResep,
+            descResep = descResep,
+            kategori = kategori,
+            gambarId = gambarId
+        )
+    }
+
     companion object CREATOR : Parcelable.Creator<Resep> {
         override fun createFromParcel(parcel: Parcel): Resep {
             return Resep(parcel)

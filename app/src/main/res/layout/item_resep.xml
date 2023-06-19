@@ -29,8 +29,7 @@
                 android:id="@+id/imageResep"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:scaleType="fitCenter"
-                app:srcCompat="@drawable/bakso" />
+                android:scaleType="fitCenter" />
 
             <TextView
                 android:id="@+id/labelResep"
@@ -40,9 +39,9 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
                 android:ellipsize="end"
+                android:gravity="center"
                 android:maxLines="2"
                 android:text="TextView"
-                android:gravity="center"
                 android:textSize="13sp" />
 
         </LinearLayout>

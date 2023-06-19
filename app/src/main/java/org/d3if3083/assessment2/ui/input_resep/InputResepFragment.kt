@@ -35,6 +35,7 @@ import org.d3if3083.assessment2.databinding.FragmentInputResepBinding
 import org.d3if3083.assessment2.db.ResepDb
 import org.d3if3083.assessment2.model.Resep
 import org.d3if3083.assessment2.ui.resep.ResepViewModel
+import org.d3if3083.assessment2.ui.resep.ResepViewModelFactory
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -53,7 +54,9 @@ class InputResepFragment : Fragment() {
     private var isImageUploaded = false
 
     private val viewModel: ResepViewModel by lazy {
-        ViewModelProvider(this)[ResepViewModel::class.java]
+        val db = ResepDb.getInstance(requireContext())
+        val factory = ResepViewModelFactory(db.resepDao)
+        ViewModelProvider(this, factory)[ResepViewModel::class.java]
     }
 
     // This property is only valid between onCreateView and

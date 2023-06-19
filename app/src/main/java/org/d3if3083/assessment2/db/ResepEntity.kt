@@ -12,7 +12,7 @@ data class ResepEntity(
     val namaResep: String,
     val descResep: String,
     val kategori: String,
-    val gambar: Int = 0,
+    val gambarId: String,
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
@@ -20,7 +20,7 @@ data class ResepEntity(
         parcel.readString().toString(),
         parcel.readString().toString(),
         parcel.readString().toString(),
-        parcel.readInt(),
+        parcel.readString().toString(),
     )
 
     override fun describeContents(): Int {
@@ -32,7 +32,7 @@ data class ResepEntity(
         dest.writeString(namaResep)
         dest.writeString(descResep)
         dest.writeString(kategori)
-        dest.writeInt(gambar)
+        dest.writeString(gambarId)
     }
 
     companion object CREATOR : Parcelable.Creator<ResepEntity> {

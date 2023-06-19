@@ -20,14 +20,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.d3if3083.assessment2.R
 import org.d3if3083.assessment2.databinding.FragmentDetailResepBinding
+import org.d3if3083.assessment2.db.ResepDb
 import org.d3if3083.assessment2.model.Resep
 import org.d3if3083.assessment2.ui.resep.ResepViewModel
+import org.d3if3083.assessment2.ui.resep.ResepViewModelFactory
 import org.d3if3083.galerihewan.network.ResepApi
 
 class DetailResepFragment : Fragment() {
 
     private val viewModel: ResepViewModel by lazy {
-        ViewModelProvider(this)[ResepViewModel::class.java]
+        val db = ResepDb.getInstance(requireContext())
+        val factory = ResepViewModelFactory(db.resepDao)
+        ViewModelProvider(this, factory)[ResepViewModel::class.java]
     }
 
 
@@ -119,7 +123,8 @@ class DetailResepFragment : Fragment() {
                         }
                     }
                     if (result) {
-                        Toast.makeText(requireContext(), "Berhasil dihapus", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Berhasil dihapus", Toast.LENGTH_SHORT)
+                            .show()
                         findNavController().navigateUp()
                     } else {
                         Toast.makeText(requireContext(), "Gagal dihapus", Toast.LENGTH_SHORT).show()

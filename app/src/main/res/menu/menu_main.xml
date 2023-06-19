@@ -4,6 +4,12 @@
     tools:context="org.d3if3083.assessment2.ui.resep.ResepFragment">
 
     <item
+        android:id="@+id/menu_histori"
+        android:icon="@drawable/baseline_history_24"
+        app:showAsAction="ifRoom"
+        android:title="History" />
+
+    <item
         android:id="@+id/menu_about"
         android:title="@string/action_about"
         app:showAsAction="never" />

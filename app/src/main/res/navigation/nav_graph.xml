@@ -20,6 +20,9 @@
         <action
             android:id="@+id/action_resepFragment_to_aboutFragment"
             app:destination="@id/aboutFragment" />
+        <action
+            android:id="@+id/action_resepFragment_to_historiFragment"
+            app:destination="@id/historiFragment" />
     </fragment>
     <fragment
         android:id="@+id/InputResep"
@@ -45,5 +48,10 @@
             android:name="currentResep"
             app:argType="org.d3if3083.assessment2.db.ResepEntity" />
     </fragment>
+    <fragment
+        android:id="@+id/historiFragment"
+        android:name="org.d3if3083.assessment2.ui.histori.HistoriFragment"
+        android:label="@string/histori_fragment_label"
+        tools:layout="@layout/fragment_histori"/>
 
 </navigation>
