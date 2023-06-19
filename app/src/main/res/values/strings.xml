@@ -1,22 +1,31 @@
 <resources>
     <string name="app_name">Dish Genius</string>
     <string name="action_about">Tentang Aplikasi</string>
-    <string name="data_resep_label">Tampilan Resep</string>
+    <string name="data_resep_label">Resep</string>
     <string name="input_resep_label">Tambah Resep</string>
     <string name="nama_resep">Nama Resep</string>
     <string name="kategori_resep">Makanan</string>
     <string name="tombol_simpan">Simpan</string>
-    <string name="desc_resep">Deskripsi Singkat</string>
+    <string name="desc_resep">Deskripsi Resep</string>
     <string name="copyright">Dish Genius adalah sebuah aplikasi Android untuk menemukan inspirasi resep makanan dan minuman yang dapat dicoba di rumah. Aplikasi ini menawarkan berbagai macam resep masakan dari berbagai jenis masakan, mulai dari masakan lokal hingga masakan internasional.
         \n\nCopyright © 2023 Dish Genius.\nAll rights reserved.</string>
     <string name="belum_ada_data">Data masih kosong</string>
-    <string name="histori">Histori</string>
     <string name="deskripsi">Deskripsi</string>
-
-    <string name="hapus_histori">Hapus Histori</string>
     <string name="konfirmasi_hapus_item">Hapus Resep?</string>
     <string name="hapus">Hapus</string>
     <string name="batal">Batal</string>
     <string name="kategori_hint">Pilih Kategori</string>
+    <string name="text_tombol_share">Bagikan</string>
+    <string name="kategori_perresep">"Kategori: "</string>
+    <string name="koneksi_error">Koneksi Error\n</string>
+    <string name="text_upload_button">Unggah</string>
+    <string name="text_ImageView_gambar">Gambar</string>
+
+    // notif
+    <string name="channel_name">Updater</string>
+    <string name="channel_desc">Update data resep</string>
+    <string name="notif_title">Resep yang paling enak telah hadir!</string>
+    <string name="notif_text">Kira-kira makanan atau minuman apa ya? Cek sekarang yuk!</string>
+    <string name="hapus_resep">Hapus Resep</string>
 
 </resources>

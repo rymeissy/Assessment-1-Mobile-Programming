@@ -8,27 +8,28 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.d3if3083.assessment2.R
 import org.d3if3083.assessment2.databinding.FragmentDetailResepBinding
-import org.d3if3083.assessment2.db.ResepDb
-import org.d3if3083.assessment2.db.ResepEntity
-import org.d3if3155.hitungbmi.ui.histori.DetailResepViewModel
-import org.d3if3155.hitungbmi.ui.histori.DetailResepViewModelFactory
+import org.d3if3083.assessment2.model.Resep
+import org.d3if3083.assessment2.ui.resep.ResepViewModel
+import org.d3if3083.galerihewan.network.ResepApi
 
 class DetailResepFragment : Fragment() {
 
-    // view model
-    private val viewModel: DetailResepViewModel by lazy {
-        val db = ResepDb.getInstance(requireContext())
-        val factory = DetailResepViewModelFactory(db.resepDao)
-        ViewModelProvider(this, factory)[DetailResepViewModel::class.java]
+    private val viewModel: ResepViewModel by lazy {
+        ViewModelProvider(this)[ResepViewModel::class.java]
     }
+
 
     private var _binding: FragmentDetailResepBinding? = null
 
@@ -45,6 +46,8 @@ class DetailResepFragment : Fragment() {
 
         activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.GONE
 
+        viewModel.getData()
+
         return binding.root
     }
 
@@ -52,19 +55,25 @@ class DetailResepFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
-        val data = arguments?.getParcelable<ResepEntity>("currentResep")
+        val data = arguments?.getParcelable<Resep>("currentResep")
 
         // get data from bundle
         if (data != null) {
             (activity as AppCompatActivity).supportActionBar?.title = data.namaResep
-            binding.productImage.setImageResource(data.gambar)
-            binding.productDescription.text = data.descResep
+
+            Glide.with(binding.recipeImage.context)
+                .load(ResepApi.getResepUrl(data.gambarId))
+                .error(R.drawable.ic_baseline_broken_image_24)
+                .into(binding.recipeImage)
+            binding.recipeCategory.text = "Kategori: ${data.kategori}"
+            binding.recipeDescription.text = data.descResep
         }
 
         binding.shareButton.setOnClickListener {
             val sendIntent: String =
                 """
                 Resep ${data?.namaResep}
+                ${data?.kategori}
                 ${data?.descResep}
            """.trimIndent()
             val shareIntent = Intent().apply {
@@ -98,20 +107,30 @@ class DetailResepFragment : Fragment() {
     }
 
     private fun hapusResep() {
-        MaterialAlertDialogBuilder(requireContext())
+        var result = false
+        val result1 = MaterialAlertDialogBuilder(requireContext())
             .setMessage(R.string.konfirmasi_hapus_item)
             .setPositiveButton(getString(R.string.hapus)) { _, _ ->
-                val data = arguments?.getParcelable<ResepEntity>("currentResep")
+                val data = arguments?.getParcelable<Resep>("currentResep")
                 if (data != null) {
-                    viewModel.deleteResep(data)
-                    findNavController().navigateUp()
-                }
+                    runBlocking(Dispatchers.IO) {
+                        viewModel.deleteResep(data).also {
+                            result = it
+                        }
+                    }
+                    if (result) {
+                        Toast.makeText(requireContext(), "Berhasil dihapus", Toast.LENGTH_SHORT).show()
+                        findNavController().navigateUp()
+                    } else {
+                        Toast.makeText(requireContext(), "Gagal dihapus", Toast.LENGTH_SHORT).show()
+                    }
 
+                }
             }
             .setNegativeButton(getString(R.string.batal)) { dialog, _ ->
+                result = false
                 dialog.cancel()
             }
             .show()
     }
-
 }

@@ -26,9 +26,8 @@
         android:name="org.d3if3083.assessment2.ui.input_resep.InputResepFragment"
         android:label="@string/input_resep_label"
         tools:layout="@layout/fragment_input_resep">
-
         <action
-            android:id="@+id/action_InputResep_to_TampilanResep"
+            android:id="@+id/action_InputResep_to_resepFragment"
             app:destination="@id/resepFragment" />
     </fragment>
     <fragment

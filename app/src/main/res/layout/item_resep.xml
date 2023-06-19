@@ -43,7 +43,7 @@
                 android:maxLines="2"
                 android:text="TextView"
                 android:gravity="center"
-                android:textSize="15sp" />
+                android:textSize="13sp" />
 
         </LinearLayout>
 

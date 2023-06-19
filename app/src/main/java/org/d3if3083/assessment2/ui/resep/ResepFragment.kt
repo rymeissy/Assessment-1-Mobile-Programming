@@ -1,5 +1,8 @@
 package org.d3if3083.assessment2.ui.resep
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -8,6 +11,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
@@ -17,12 +22,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
+import org.d3if3083.assessment2.MainActivity
 import org.d3if3083.assessment2.R
 import org.d3if3083.assessment2.data.SettingDataStore
 import org.d3if3083.assessment2.data.dataStore
 import org.d3if3083.assessment2.databinding.FragmentResepBinding
 import org.d3if3083.assessment2.db.ResepDb
 import org.d3if3083.assessment2.db.ResepEntity
+import org.d3if3083.assessment2.model.Resep
+import org.d3if3083.galerihewan.network.ApiStatus
 
 
 /**
@@ -36,9 +44,7 @@ class ResepFragment : Fragment(), ResepAdapter.OnItemClickListener {
     }
 
     private val viewModel: ResepViewModel by lazy {
-        val db = ResepDb.getInstance(requireContext())
-        val factory = ResepViewModelFactory(db.resepDao)
-        ViewModelProvider(this, factory)[ResepViewModel::class.java]
+        ViewModelProvider(this)[ResepViewModel::class.java]
     }
 
     private var _binding: FragmentResepBinding? = null
@@ -71,28 +77,23 @@ class ResepFragment : Fragment(), ResepAdapter.OnItemClickListener {
             adapter = myAdapter
             setHasFixedSize(true)
         }
+        viewModel.retrieveData()
+        viewModel.getData().observe(viewLifecycleOwner) {
+            myAdapter.updateData(it)
+        }
+
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // mengembalikan is first time data store ke bentuk aplikasi pertama kali terbuka (yang menampilkan data dummy)
-        layoutDataStore.isFirstTime.asLiveData().observe(viewLifecycleOwner) {
-            isFirstTime = it
-
-            if (isFirstTime) {
-                viewModel.initData()
-                lifecycleScope.launch {
-                    layoutDataStore.saveFirstTime(false, requireContext())
-                }
-            }
-            activity?.invalidateOptionsMenu()
+        viewModel.getStatus().observe(viewLifecycleOwner) {
+            updateProgress(it)
         }
 
-        viewModel.getResep().observe(viewLifecycleOwner) {
-            myAdapter.updateData(it)
-        }
+        viewModel.scheduleUpdater(requireActivity().application)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -117,19 +118,55 @@ class ResepFragment : Fragment(), ResepAdapter.OnItemClickListener {
         _binding = null
     }
 
-    // agar FAB tidak hilang setelah membuka fragment lainnya
-    override fun onResume() {
-        super.onResume()
-        activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.VISIBLE
-    }
-
-    override fun onItemClick(resepEntity: ResepEntity) {
+    override fun onItemClick(resep: Resep) {
         // Bundle untuk mengirim data ke DetailResepFragment
         val bundle = Bundle()
-        bundle.putParcelable("currentResep", resepEntity)
+        bundle.putParcelable("currentResep", resep)
         findNavController().navigate(
             R.id.action_resepFragment_to_detailResepFragment, bundle
         )
+    }
+
+    private fun updateProgress(status: ApiStatus) {
+        when (status) {
+            ApiStatus.LOADING -> {
+                binding.progressBar.visibility = View.VISIBLE
+                // hilangkan FAB ketika loading
+                activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.GONE
+
+            }
+            ApiStatus.SUCCESS -> {
+                binding.progressBar.visibility = View.GONE
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    requestNotificationPermission()
+                }
+                // tampilkan FAB ketika sukses
+                activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.VISIBLE
+
+            }
+            ApiStatus.FAILED -> {
+                binding.progressBar.visibility = View.GONE
+                binding.networkError.visibility = View.VISIBLE
+                // hilangkan FAB ketika error
+                activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.GONE
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun requestNotificationPermission() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                MainActivity.PERMISSION_REQUEST_CODE
+            )
+        }
     }
 }
 

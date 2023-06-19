@@ -3,18 +3,20 @@ package org.d3if3083.assessment2.ui.resep
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import org.d3if3083.assessment2.R
 import org.d3if3083.assessment2.databinding.ItemResepBinding
-import org.d3if3083.assessment2.db.ResepEntity
+import org.d3if3083.assessment2.model.Resep
+import org.d3if3083.galerihewan.network.ResepApi
 
 class ResepAdapter() :
     RecyclerView.Adapter<ResepAdapter.ViewHolder>() {
-
-    val data = mutableListOf<ResepEntity>()
+    private val data = mutableListOf<Resep>()
     private var listener: OnItemClickListener? = null
 
     // interface untuk click listener
     interface OnItemClickListener {
-        fun onItemClick(resepEntity: ResepEntity)
+        fun onItemClick(resep: Resep)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
@@ -22,7 +24,7 @@ class ResepAdapter() :
     }
 
     // update data of rycycler view
-    fun updateData(newData: List<ResepEntity>) {
+    fun updateData(newData: List<Resep>) {
         data.clear()
         for (item in newData) {
             data.add(item)
@@ -33,7 +35,7 @@ class ResepAdapter() :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemResepBinding.inflate(inflater, parent, false)
-        return ViewHolder(binding, listener)
+        return ViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
@@ -46,7 +48,6 @@ class ResepAdapter() :
 
     inner class ViewHolder(
         private val binding: ItemResepBinding,
-        itemClickListener: OnItemClickListener?
     ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
@@ -59,12 +60,16 @@ class ResepAdapter() :
             }
         }
 
-        fun bind(resepEntity: ResepEntity) {
+        fun bind(resep: Resep) {
             // Bind the data to the views in the layout
             binding.apply {
-                imageResep.setImageResource(resepEntity.gambar)
-                labelResep.text = resepEntity.namaResep
+                labelResep.text = resep.namaResep
             }
+
+            Glide.with(binding.imageResep.context)
+                .load(ResepApi.getResepUrl(resep.gambarId))
+                .error(R.drawable.ic_baseline_broken_image_24)
+                .into(binding.imageResep)
         }
     }
 

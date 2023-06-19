@@ -6,9 +6,12 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.OpenableColumns
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +19,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -23,12 +27,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.d3if3083.assessment2.R
 import org.d3if3083.assessment2.databinding.FragmentInputResepBinding
 import org.d3if3083.assessment2.db.ResepDb
-import org.d3if3083.assessment2.db.ResepEntity
+import org.d3if3083.assessment2.model.Resep
 import org.d3if3083.assessment2.ui.resep.ResepViewModel
-import org.d3if3083.assessment2.ui.resep.ResepViewModelFactory
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -37,17 +43,26 @@ class InputResepFragment : Fragment() {
 
     private var _binding: FragmentInputResepBinding? = null
 
+    // varibel tombol unggah gambar
     private lateinit var uploadButton: Button
 
+    // variabel tombol cancel
+    private lateinit var cancelButton: ImageButton
+
+    // Tambahkan variabel flag untuk memeriksa apakah gambar telah diunggah
+    private var isImageUploaded = false
+
     private val viewModel: ResepViewModel by lazy {
-        val db = ResepDb.getInstance(requireContext())
-        val factory = ResepViewModelFactory(db.resepDao)
-        ViewModelProvider(this, factory)[ResepViewModel::class.java]
+        ViewModelProvider(this)[ResepViewModel::class.java]
     }
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private var storageref = FirebaseStorage.getInstance().reference
+    private var imageUri: Uri? = null
+    private var filename: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,6 +71,8 @@ class InputResepFragment : Fragment() {
         _binding = FragmentInputResepBinding.inflate(inflater, container, false)
         // menghilangkan FAB
         activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.GONE
+
+        viewModel.getData()
 
         return binding.root
     }
@@ -76,6 +93,11 @@ class InputResepFragment : Fragment() {
         // tombol simpan
         binding.buttonSimpan.setOnClickListener {
             simpanDataResep()
+
+            if (imageUri != null) {
+                filename = getFileName(imageUri!!)
+                uploadImage(filename!!)
+            }
         }
 
         // tombol unggah gambar
@@ -86,26 +108,50 @@ class InputResepFragment : Fragment() {
 
         // agar gambar bisa diklik
         binding.gambarResepYangDiunggah.setOnClickListener {
-            // Mengambil sumber gambar dari ImageView
-            val drawable = binding.gambarResepYangDiunggah.drawable
+            // Memeriksa apakah gambar telah diunggah
+            if (isImageUploaded) {
+                // Mengambil sumber gambar dari ImageView
+                val drawable = binding.gambarResepYangDiunggah.drawable
 
-            // Memeriksa apakah ImageView memiliki gambar
-            if (drawable != null) {
-                // Membuat dialog untuk menampilkan gambar
-                val dialog = Dialog(requireContext())
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-                dialog.setContentView(R.layout.dialog_image)
+                // Memeriksa apakah ImageView memiliki gambar
+                if (drawable != null) {
+                    // Membuat dialog untuk menampilkan gambar
+                    val dialog = Dialog(requireContext())
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                    dialog.setContentView(R.layout.dialog_image)
 
-                val imageView = dialog.findViewById<ImageView>(R.id.dialogImageView)
-                imageView.setImageDrawable(drawable)
+                    val imageView = dialog.findViewById<ImageView>(R.id.dialogImageView)
+                    imageView.setImageDrawable(drawable)
 
-                // Mengatur dialog agar dapat ditutup saat diklik
-                imageView.setOnClickListener {
-                    dialog.dismiss()
+                    // Mengatur dialog agar dapat ditutup saat diklik
+                    imageView.setOnClickListener {
+                        dialog.dismiss()
+                    }
+                    dialog.show()
                 }
-                dialog.show()
             }
         }
+
+        // tombol cancel
+        cancelButton = binding.btnCancel
+        cancelButton.visibility = View.GONE
+        cancelButton.setOnClickListener {
+            // Logika untuk menghapus gambar yang telah diunggah
+            removeUploadedImage()
+        }
+    }
+
+    private fun removeUploadedImage() {
+        // Menghapus gambar yang telah diunggah
+        binding.gambarResepYangDiunggah.setImageDrawable(null)
+        // Mengatur flag menjadi false
+        isImageUploaded = false
+        // Mengatur visibilitas tombol upload menjadi ditampilkan
+        uploadButton.visibility = View.VISIBLE
+        // Mengatur visibilitas tombol cancel menjadi tidak ditampilkan
+        cancelButton.visibility = View.GONE
+        // Mengatur ulang ikon foto placeholder
+        binding.gambarResepYangDiunggah.setImageResource(R.drawable.ic_baseline_insert_photo_24)
     }
 
     private fun pickImageFromGallery() {
@@ -140,8 +186,8 @@ class InputResepFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_PICK && resultCode == Activity.RESULT_OK && data != null) {
             val selectedImageUri: Uri = data.data!!
-            // Gunakan URI gambar yang dipilih untuk melakukan aksi sesuai kebutuhan
-            // Misalnya, menampilkan gambar menggunakan Glide atau mengunggahnya ke server
+            imageUri = selectedImageUri
+            // Gunakan URI gambar yang dipilih untuk memuat gambar
             loadImage(selectedImageUri)
         }
     }
@@ -151,8 +197,14 @@ class InputResepFragment : Fragment() {
             .load(imageUri)
             .into(binding.gambarResepYangDiunggah) // ImageView yang akan menampilkan gambar
 
+        // Set flag menjadi true ketika gambar diunggah
+        isImageUploaded = true
+
         // jika telah mengunggah gambar, tombol unggah gambar akan hilang
         uploadButton.visibility = View.GONE
+
+        // Menampilkan tombol cancel setelah gambar diunggah
+        cancelButton.visibility = View.VISIBLE
     }
 
     private fun requestGalleryPermission() {
@@ -193,7 +245,51 @@ class InputResepFragment : Fragment() {
         private const val REQUEST_IMAGE_PICK = 1001
     }
 
+    private fun uploadImage(filename: String) {
+        try {
+            imageUri?.let {
+                storageref.child("img/${filename}").putFile(it)
+                    .addOnSuccessListener {
+                        Log.e("Upload Image", "Berhasil mengunggah gambar")
+                    }
+                    .addOnFailureListener {
+                        Log.e("Upload Image", "Gagal mengunggah gambar")
+                    }
+            }
+        } catch (e: Exception) {
+            Log.e("Upload Image", e.message.toString())
+        }
+    }
+
+    private fun getFileName(uri: Uri): String {
+        var result: String? = null
+        if (uri.scheme.equals("content")) {
+            val cursor: Cursor? =
+                requireContext().contentResolver.query(uri, null, null, null, null)
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result =
+                        cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME))
+                }
+            } finally {
+                cursor?.close()
+            }
+        }
+
+        if (result == null) {
+            result = uri.path
+            val cut: Int = result!!.lastIndexOf('/')
+            if (cut != -1) {
+                result = result.substring(cut + 1)
+            }
+        }
+        return result
+    }
+
     private fun simpanDataResep() {
+        var result = false
+        var resep: Resep?
+
         // validasi input
         if (binding.namaInp.text.toString().isEmpty()) {
             binding.namaInp.error = "Nama resep tidak boleh kosong"
@@ -208,34 +304,43 @@ class InputResepFragment : Fragment() {
                 .show()
             return
         }
-        if (binding.gambarResepYangDiunggah.drawable == null) {
+        if (imageUri == null) {
             Toast.makeText(requireContext(), "Gambar tidak boleh kosong", Toast.LENGTH_SHORT)
                 .show()
             return
         }
 
-        // size of data before adding new data
-        // val size = viewModel.data.value?.size
+        if (imageUri != null) {
+            resep = Resep(
+                0,
+                binding.namaInp.text.toString(),
+                binding.descInp.text.toString(),
+                binding.spinner.selectedItem.toString(),
+                getFileName(imageUri!!),
+            )
 
-        val resep = ResepEntity(
-            namaResep = binding.namaInp.text.toString(),
-            descResep = binding.descInp.text.toString(),
-            kategori = binding.spinner.selectedItem.toString(),
-            gambar = R.drawable.bakso,
-        )
+        } else {
+            resep = Resep(
+                0,
+                binding.namaInp.text.toString(),
+                binding.descInp.text.toString(),
+                binding.spinner.selectedItem.toString(),
+                "",
+            )
+        }
 
-        viewModel.insertData(resep)
+        runBlocking(Dispatchers.IO) {
+            viewModel.updateData(this@InputResepFragment, resep).also {
+                if (it) result = true
+            }
+        }
 
-        /*        // check if data is added to database
-                if (viewModel.data.value?.size == size?.plus(1)) {
-                    Toast.makeText(requireContext(), "Data berhasil ditambahkan dan size = $size", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    Toast.makeText(requireContext(), "Data gagal ditambahkan dan size $size", Toast.LENGTH_SHORT)
-                        .show()
-                }*/
-
-        findNavController().navigate(R.id.action_InputResep_to_TampilanResep)
+        if (result) {
+            Toast.makeText(requireContext(), "Berhasil menyimpan data", Toast.LENGTH_SHORT).show()
+            findNavController().navigateUp()
+        } else {
+            Toast.makeText(requireContext(), "Gagal menyimpan data", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onDestroyView() {

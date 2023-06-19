@@ -4,6 +4,6 @@
     <item
         android:id="@+id/menu_hapus"
         android:icon="@drawable/baseline_delete_forever_24"
-        android:title="@string/hapus_histori"
+        android:title="@string/hapus_resep"
         app:showAsAction="ifRoom" />
 </menu>

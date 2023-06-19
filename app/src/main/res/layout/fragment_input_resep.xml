@@ -121,13 +121,26 @@
             app:layout_constraintTop_toBottomOf="@id/textGambar"
             app:srcCompat="@drawable/ic_baseline_insert_photo_24" />
 
+        <ImageButton
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_baseline_cancel_24"
+            app:layout_constraintEnd_toEndOf="@+id/gambarResepYangDiunggah"
+            app:layout_constraintTop_toTopOf="@+id/gambarResepYangDiunggah" />
+
         <Button
             android:id="@+id/buttonUnggahdGambar"
             style="@style/Widget.MaterialComponents.Button.Icon"
             app:icon="@drawable/baseline_upload_24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Unggah"
+            android:text="@string/text_upload_button"
             app:cornerRadius="0dp"
             app:layout_constraintBottom_toBottomOf="@id/gambarResepYangDiunggah"
             app:layout_constraintEnd_toEndOf="@id/gambarResepYangDiunggah"
@@ -142,7 +155,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginTop="16dp"
-            android:text="Gambar"
+            android:text="@string/text_ImageView_gambar"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/gambarResepYangDiunggah"

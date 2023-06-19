@@ -1,70 +1,98 @@
 package org.d3if3083.assessment2.ui.resep
 
+import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.d3if3083.assessment2.R
 import org.d3if3083.assessment2.db.ResepDao
-import org.d3if3083.assessment2.db.ResepEntity
 import org.d3if3083.assessment2.model.Resep
+import org.d3if3083.assessment2.network.UpdateWorker
+import org.d3if3083.assessment2.ui.detail_resep.DetailResepFragment
+import org.d3if3083.assessment2.ui.input_resep.InputResepFragment
+import org.d3if3083.galerihewan.network.ApiStatus
+import org.d3if3083.galerihewan.network.ResepApi
+import java.util.concurrent.TimeUnit
 
-class ResepViewModel(private val db: ResepDao) : ViewModel() {
+class ResepViewModel : ViewModel() {
 
     // mengambil data dari database
-    private val data: LiveData<List<ResepEntity>> = db.getLastRecipe()
+    private val data = MutableLiveData<List<Resep>>()
+    private val status = MutableLiveData<ApiStatus>()
 
-    // fungsi untuk insert data ke database
-    fun insertData(resep: ResepEntity) = viewModelScope.launch {
-        withContext(Dispatchers.IO) {
-            db.insert(resep)
+    init {
+        retrieveData()
+    }
+
+    fun retrieveData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            status.postValue(ApiStatus.LOADING)
+            try {
+                data.postValue(ResepApi.service.getResep())
+                status.postValue(ApiStatus.SUCCESS)
+            } catch (e: Exception) {
+                Log.d("MainViewModel", "Failure: ${e.message}")
+                status.postValue(ApiStatus.FAILED)
+            }
         }
     }
 
-    fun initData() {
-        listOf(
-            ResepEntity(
-                namaResep = "Baso Bakar",
-                descResep = "Baso yang dibakar dengan bumbu kacang",
-                kategori = "Makanan",
-                gambar = R.drawable.bakso
-            ),
-            ResepEntity(
-                namaResep = "Es Jeruk",
-                descResep = "Es jeruk segeerrr",
-                kategori = "Minuman",
-                gambar = R.drawable.es
-            ),
-            ResepEntity(
-                namaResep = "Nasi Goreng Spesial",
-                descResep = "Rasanya spesial banget dan nagih",
-                kategori = "Makanan",
-                gambar = R.drawable.nasgor
-            ),
-            ResepEntity(
-                namaResep = "Mangga Yakult",
-                descResep = "Mangga yang dicampur dengan Yakult",
-                kategori = "Minuman",
-                gambar = R.drawable.mangga
-            ),
-            ResepEntity(
-                namaResep = "Pizza Yummy",
-                descResep = "Pizza dengan topping",
-                kategori = "Makanan",
-                gambar = R.drawable.pizza
-            ),
-            ResepEntity(
-                namaResep = "Soda Ceria",
-                descResep = "Soda yang manis",
-                kategori = "Minuman",
-                gambar = R.drawable.soda
-            ),
-        ).forEach {
-            insertData(it)
-        }
+    fun scheduleUpdater(app: Application) {
+        val request = OneTimeWorkRequestBuilder<UpdateWorker>()
+            .setInitialDelay(1, TimeUnit.MINUTES)
+            .build()
+        WorkManager.getInstance(app).enqueueUniqueWork(
+            UpdateWorker.WORK_NAME,
+            ExistingWorkPolicy.REPLACE,
+            request
+        )
     }
 
-    fun getResep(): LiveData<List<ResepEntity>> = data
+    suspend fun updateData(fragment: InputResepFragment, resep: Resep) : Boolean {
+        status.postValue(ApiStatus.LOADING)
+        try {
+            val list = data.value!!.toMutableList()
+            list.add(resep)
+            data.postValue(list)
+
+            ResepApi.service.putResep(list.toList())
+            status.postValue(ApiStatus.SUCCESS)
+            return true
+        } catch (e: Exception) {
+            Log.d("MainViewModel", "Failure: ${e.message}")
+            status.postValue(ApiStatus.FAILED)
+        }
+        return false
+    }
+
+    suspend fun deleteResep(resep: Resep) : Boolean {
+        status.postValue(ApiStatus.LOADING)
+        try {
+            val list = data.value!!.toMutableList()
+            list.remove(resep)
+            data.postValue(list)
+
+            ResepApi.service.putResep(list.toList())
+            status.postValue(ApiStatus.SUCCESS)
+            return true
+        } catch (e: Exception) {
+            Log.d("MainViewModel", "Failure: ${e.message}")
+            status.postValue(ApiStatus.FAILED)
+        }
+        return false
+    }
+
+    fun getData(): LiveData<List<Resep>> = data
+
+    fun getStatus(): LiveData<ApiStatus> = status
 }

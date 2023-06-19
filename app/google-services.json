@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "833547566957",
+    "firebase_url": "https://mopro-dishgenius-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "mopro-dishgenius",
+    "storage_bucket": "mopro-dishgenius.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:833547566957:android:519adc11861e1efa36e464",
+        "android_client_info": {
+          "package_name": "org.d3if3083.assessment2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "833547566957-2efqmuvij4vl1b4shorvf400j7nbmhrt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTwtyC7ZAqGmc5YgeXztAmzwPC8GrzuLI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "833547566957-2efqmuvij4vl1b4shorvf400j7nbmhrt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
