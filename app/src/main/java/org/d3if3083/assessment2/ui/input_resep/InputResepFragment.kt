@@ -26,7 +26,6 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -90,11 +89,11 @@ class InputResepFragment : Fragment() {
 
         // tombol simpan
         binding.buttonSimpan.setOnClickListener {
-            simpanDataResep()
-
             if (imageUri != null) {
                 filename = getFileName(imageUri!!)
-                uploadImage(filename!!)
+                uploadImage(filename!!).also { simpanDataResep() }
+            } else {
+                simpanDataResep()
             }
         }
 
@@ -140,15 +139,15 @@ class InputResepFragment : Fragment() {
     }
 
     private fun removeUploadedImage() {
-        // Menghapus gambar yang telah diunggah
+        // hapus gambar yang telah diunggah di Fragment
         binding.gambarResepYangDiunggah.setImageDrawable(null)
-        // Mengatur flag menjadi false
+        // flag menjadi false
         isImageUploaded = false
-        // Mengatur visibilitas tombol upload menjadi ditampilkan
+        // atur visibilitas tombol upload menjadi ditampilkan
         uploadButton.visibility = View.VISIBLE
-        // Mengatur visibilitas tombol cancel menjadi tidak ditampilkan
+        // atur visibilitas tombol cancel menjadi tidak ditampilkan
         cancelButton.visibility = View.GONE
-        // Mengatur ulang ikon foto placeholder
+        // atur ulang ikon foto placeholder
         binding.gambarResepYangDiunggah.setImageResource(R.drawable.ic_baseline_insert_photo_24)
     }
 
@@ -243,7 +242,7 @@ class InputResepFragment : Fragment() {
         private const val REQUEST_IMAGE_PICK = 1001
     }
 
-    private fun uploadImage(filename: String) {
+    private fun uploadImage(filename: String) : Boolean {
         try {
             imageUri?.let {
                 storageref.child("img/${filename}").putFile(it)
@@ -254,9 +253,11 @@ class InputResepFragment : Fragment() {
                         Log.e("Upload Image", "Gagal mengunggah gambar")
                     }
             }
+            return true
         } catch (e: Exception) {
             Log.e("Upload Image", e.message.toString())
         }
+        return false
     }
 
     private fun getFileName(uri: Uri): String {
