@@ -1,1 +1,4 @@
-# Assessment-1-Mobile-Programming
+# Assessment Mobile Programming
+
+Nama: Ratu Yuri Meissy
+NIM: 6706213083
