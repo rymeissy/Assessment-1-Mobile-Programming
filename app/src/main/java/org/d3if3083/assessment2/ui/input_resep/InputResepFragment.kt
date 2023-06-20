@@ -37,9 +37,6 @@ import org.d3if3083.assessment2.model.Resep
 import org.d3if3083.assessment2.ui.resep.ResepViewModel
 import org.d3if3083.assessment2.ui.resep.ResepViewModelFactory
 
-/**
- * A simple [Fragment] subclass as the second destination in the navigation.
- */
 class InputResepFragment : Fragment() {
 
     private var _binding: FragmentInputResepBinding? = null

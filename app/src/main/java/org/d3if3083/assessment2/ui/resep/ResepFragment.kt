@@ -23,9 +23,6 @@ import org.d3if3083.assessment2.db.ResepDb
 import org.d3if3083.assessment2.model.Resep
 import org.d3if3083.assessment2.network.ApiStatus
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
 class ResepFragment : Fragment(), ResepAdapter.OnItemClickListener {
 
     private val viewModel: ResepViewModel by lazy {
@@ -35,15 +32,13 @@ class ResepFragment : Fragment(), ResepAdapter.OnItemClickListener {
     }
 
     private var _binding: FragmentResepBinding? = null
+
     private lateinit var myAdapter: ResepAdapter
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
 
         _binding = FragmentResepBinding.inflate(inflater, container, false)
@@ -62,8 +57,6 @@ class ResepFragment : Fragment(), ResepAdapter.OnItemClickListener {
         viewModel.getData().observe(viewLifecycleOwner) {
             myAdapter.updateData(it)
         }
-
-
         return binding.root
     }
 
@@ -75,7 +68,7 @@ class ResepFragment : Fragment(), ResepAdapter.OnItemClickListener {
         viewModel.scheduleUpdater(requireActivity().application)
 
         binding.fab.setOnClickListener {
-            // go to second fragment
+            // go to input resep fragment
             findNavController().navigate(R.id.action_resepFragment_to_InputResep)
         }
     }
@@ -106,6 +99,7 @@ class ResepFragment : Fragment(), ResepAdapter.OnItemClickListener {
         // Bundle untuk mengirim data ke DetailResepFragment
         val bundle = Bundle()
         bundle.putParcelable("currentResep", resep)
+
         findNavController().navigate(
             R.id.action_resepFragment_to_detailResepFragment, bundle
         )
@@ -137,8 +131,7 @@ class ResepFragment : Fragment(), ResepAdapter.OnItemClickListener {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun requestNotificationPermission() {
         if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.POST_NOTIFICATIONS
+                requireContext(), Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
