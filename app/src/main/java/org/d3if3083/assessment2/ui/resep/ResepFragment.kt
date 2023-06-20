@@ -16,14 +16,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.d3if3083.assessment2.MainActivity
 import org.d3if3083.assessment2.R
 import org.d3if3083.assessment2.databinding.FragmentResepBinding
 import org.d3if3083.assessment2.db.ResepDb
 import org.d3if3083.assessment2.model.Resep
 import org.d3if3083.assessment2.network.ApiStatus
-
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -70,13 +68,16 @@ class ResepFragment : Fragment(), ResepAdapter.OnItemClickListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         viewModel.getStatus().observe(viewLifecycleOwner) {
             updateProgress(it)
         }
 
         viewModel.scheduleUpdater(requireActivity().application)
+
+        binding.fab.setOnClickListener {
+            // go to second fragment
+            findNavController().navigate(R.id.action_resepFragment_to_InputResep)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -114,9 +115,6 @@ class ResepFragment : Fragment(), ResepAdapter.OnItemClickListener {
         when (status) {
             ApiStatus.LOADING -> {
                 binding.progressBar.visibility = View.VISIBLE
-                // hilangkan FAB ketika loading
-                activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.GONE
-
             }
 
             ApiStatus.SUCCESS -> {
@@ -126,15 +124,12 @@ class ResepFragment : Fragment(), ResepAdapter.OnItemClickListener {
                     requestNotificationPermission()
                 }
                 // tampilkan FAB ketika sukses
-                activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.VISIBLE
-
+                binding.fab.visibility = View.VISIBLE
             }
 
             ApiStatus.FAILED -> {
                 binding.progressBar.visibility = View.GONE
                 binding.networkError.visibility = View.VISIBLE
-                // hilangkan FAB ketika error
-                activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.GONE
             }
         }
     }

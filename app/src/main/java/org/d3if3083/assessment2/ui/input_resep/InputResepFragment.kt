@@ -72,8 +72,6 @@ class InputResepFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentInputResepBinding.inflate(inflater, container, false)
-        // menghilangkan FAB
-        activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.GONE
 
         viewModel.getData()
 

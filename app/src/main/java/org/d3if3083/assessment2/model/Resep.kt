@@ -3,7 +3,6 @@ package org.d3if3083.assessment2.model
 import android.os.Parcel
 import android.os.Parcelable
 import org.d3if3083.assessment2.db.ResepEntity
-import java.io.Serializable
 
 data class Resep(
     val id: Long = 0L,

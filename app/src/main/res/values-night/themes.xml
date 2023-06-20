@@ -2,8 +2,34 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Apalah" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
+        <!-- Primary brand color. Color for the app bar and other top-level elements. -->
         <item name="colorPrimary">@color/green_500</item>
+        <item name="colorPrimaryVariant">@color/white</item>
         <item name="colorOnPrimary">@color/white</item>
+
+        <!-- Secondary brand color. Color for components such as progress bars, switches, and checkboxes. -->
+        <item name="colorSecondary">@color/green_500</item>
+        <item name="colorSecondaryVariant">@color/white</item>
         <item name="colorOnSecondary">@color/white</item>
+
+        <!-- Status bar color. Color of the Android system status bar. -->
+        <!--<item name="colorSurface">@color/black</item>-->
+        <item name="colorOnSurface">@color/white</item>
+
+        <!-- Navigation bar color. Color of the Android system navigation bar. -->
+        <item name="colorError">@color/red_500</item>
+        <item name="colorOnError">@color/white</item>
+
+        <!-- Color for text on top of the background color in the material theme -->
+        <item name="colorPrimarySurface">@color/green_500</item>
+        <item name="colorOnPrimarySurface">@color/white</item>
+
+        <item name="colorOnBackground">@color/white</item>
+
+        <!-- Customize your theme here. -->
+        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox
+        </item>
+
     </style>
+
 </resources>

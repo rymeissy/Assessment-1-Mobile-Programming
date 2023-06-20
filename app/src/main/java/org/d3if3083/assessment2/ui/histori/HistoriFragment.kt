@@ -3,7 +3,6 @@ package org.d3if3083.assessment2.ui.histori
 import SettingDataStore
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dataStore
 import kotlinx.coroutines.launch
@@ -46,8 +44,6 @@ class HistoriFragment : Fragment(), HistoriAdapter.OnItemClickListener {
 
         setHasOptionsMenu(true)
 
-        activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.GONE
-
         return binding.root
     }
 
@@ -61,15 +57,15 @@ class HistoriFragment : Fragment(), HistoriAdapter.OnItemClickListener {
             activity?.invalidateOptionsMenu()
         }
 
-        with(binding.recyclerView) {
+        // menyembunyikan FAB
+        activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.GONE
 
+        with(binding.recyclerView) {
             addItemDecoration(
                 DividerItemDecoration(
                     context, RecyclerView.VERTICAL
                 )
-
             )
-
             adapter = myAdapter
             setHasFixedSize(true)
         }

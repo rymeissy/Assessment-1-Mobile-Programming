@@ -8,4 +8,12 @@
     <color name="makanan">#FF9800</color>
     <color name="minuman">#2196F3</color>
     <color name="tampilan">#C9C9C9</color>
+
+    <color name="red_500">#F44336</color>
+    <color name="red_700">#D32F2F</color>
+    <color name="fab_red">#F44336</color>
+    <color name="blue_500">#2196F3</color>
+    <color name="blue_700">#1976D2</color>
+    <color name="fab_blue">#2196F3</color>
+
 </resources>
