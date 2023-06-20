@@ -84,7 +84,7 @@ class InputResepFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Buat daftar item yang akan ditampilkan pada spinner
-        val items = listOf("Kategori", "Makanan", "Minuman")
+        val items = listOf("Kategori", "Makanan", "Minuman", "Dessert")
 
         // Buat adapter dan tambahkan item ke dalam adapter
         val adapter =

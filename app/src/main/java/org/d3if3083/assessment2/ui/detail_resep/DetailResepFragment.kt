@@ -24,7 +24,7 @@ import org.d3if3083.assessment2.db.ResepDb
 import org.d3if3083.assessment2.model.Resep
 import org.d3if3083.assessment2.ui.resep.ResepViewModel
 import org.d3if3083.assessment2.ui.resep.ResepViewModelFactory
-import org.d3if3083.galerihewan.network.ResepApi
+import org.d3if3083.assessment2.network.ResepApi
 
 class DetailResepFragment : Fragment() {
 

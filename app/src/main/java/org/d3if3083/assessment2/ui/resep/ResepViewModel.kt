@@ -16,8 +16,8 @@ import org.d3if3083.assessment2.db.ResepEntity
 import org.d3if3083.assessment2.model.Resep
 import org.d3if3083.assessment2.network.UpdateWorker
 import org.d3if3083.assessment2.ui.input_resep.InputResepFragment
-import org.d3if3083.galerihewan.network.ApiStatus
-import org.d3if3083.galerihewan.network.ResepApi
+import org.d3if3083.assessment2.network.ApiStatus
+import org.d3if3083.assessment2.network.ResepApi
 import java.util.concurrent.TimeUnit
 
 class ResepViewModel(

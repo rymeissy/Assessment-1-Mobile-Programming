@@ -1,4 +1,4 @@
-package org.d3if3083.galerihewan.network
+package org.d3if3083.assessment2.network
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

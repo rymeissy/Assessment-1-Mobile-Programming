@@ -5,5 +5,5 @@
     android:layout_margin="16dp"
     android:autoLink="web"
     android:justificationMode="inter_word"
-    android:text="@string/copyright"
+    android:text="@string/text_about"
     android:textSize="18sp" />

@@ -7,7 +7,7 @@ import com.bumptech.glide.Glide
 import org.d3if3083.assessment2.R
 import org.d3if3083.assessment2.databinding.ItemResepBinding
 import org.d3if3083.assessment2.model.Resep
-import org.d3if3083.galerihewan.network.ResepApi
+import org.d3if3083.assessment2.network.ResepApi
 
 class ResepAdapter() :
     RecyclerView.Adapter<ResepAdapter.ViewHolder>() {

@@ -22,7 +22,7 @@ import org.d3if3083.assessment2.R
 import org.d3if3083.assessment2.databinding.FragmentResepBinding
 import org.d3if3083.assessment2.db.ResepDb
 import org.d3if3083.assessment2.model.Resep
-import org.d3if3083.galerihewan.network.ApiStatus
+import org.d3if3083.assessment2.network.ApiStatus
 
 
 /**

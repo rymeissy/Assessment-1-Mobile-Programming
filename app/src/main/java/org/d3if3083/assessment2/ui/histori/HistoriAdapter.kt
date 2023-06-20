@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import org.d3if3083.assessment2.R
 import org.d3if3083.assessment2.databinding.ItemHistoriBinding
 import org.d3if3083.assessment2.db.ResepEntity
-import org.d3if3083.galerihewan.network.ResepApi
+import org.d3if3083.assessment2.network.ResepApi
 
 class HistoriAdapter : ListAdapter<ResepEntity, HistoriAdapter.ViewHolder>(DIFF_CALLBACK) {
 
@@ -74,6 +74,7 @@ class HistoriAdapter : ListAdapter<ResepEntity, HistoriAdapter.ViewHolder>(DIFF_
 
             kategori.text = item.kategori
             descResep.text = item.descResep
+
         }
     }
 }
